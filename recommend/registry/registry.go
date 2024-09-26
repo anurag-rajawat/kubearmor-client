@@ -79,6 +79,10 @@ func (r *Scanner) loadDockerAuthConfigs() {
 		for _, conf := range confsWrapper.Auths {
 			data, _ := base64.StdEncoding.DecodeString(conf.Auth)
 			userPass := strings.SplitN(string(data), ":", 2)
+			if len(userPass) != 2 {
+				log.Warningf("no credentials found")
+				continue
+			}
 			r.authConfiguration.authCreds = append(r.authConfiguration.authCreds, getAuthStr(userPass[0], userPass[1]))
 		}
 	}
